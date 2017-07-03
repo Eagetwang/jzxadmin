@@ -26,6 +26,15 @@ $modelLabel = new \backend\models\FrontDoctor();
         </div>
         <div class="clearfix"></div>
     </div>
+
+    <div id="title_div" class="form-group">
+        <label for="title" class="col-sm-2 control-label"><?php echo $modelLabel->getAttributeLabel("img")?></label>
+        <div class="col-sm-10">
+            <input type="file" name="UploadForm[imageFile]" id="">
+<!--            <input type="text" class="form-control" id="img" name="FrontDoctor[img]" placeholder="必填" value="--><?php //if($doctor) echo $doctor['img'];?><!--"/>-->
+        </div>
+        <div class="clearfix"></div>
+    </div>
     <div id="title_div" class="form-group">
         <label for="title" class="col-sm-2 control-label"><?php echo $modelLabel->getAttributeLabel("level")?></label>
         <div class="col-sm-10">

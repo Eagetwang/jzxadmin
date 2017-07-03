@@ -101,10 +101,20 @@ class FrontDoctorController extends BaseController
     }
 
     public function actionAddDoctor(){
+        $img_url = "";
+        $upload = new UploadForm();
+
+        $upload->imageFile = UploadedFile::getInstance($upload,'imageFile');
+        if ($upload->imageFile && $upload->validate()) {
+            $img_url = $upload->upload();
+        }else{
+            $msg = array('errno'=>2, 'msg'=>'图片格式错误');
+            echo json_encode($msg);
+        }
         $model = new FrontDoctor();
 //        var_dump(Yii::$app->request->post());exit;
         if ($model->load(Yii::$app->request->post())) {
-
+            $model->img = $img_url;
             $model->create_time = time();
             $model->update_time = time();
             if($model->validate() == true && $model->save()){
@@ -129,11 +139,21 @@ class FrontDoctorController extends BaseController
      */
     public function actionUpdate()
     {
+        $img_url = "";
+        $upload = new UploadForm();
+
+        $upload->imageFile = UploadedFile::getInstance($upload,'imageFile');
+        if ($upload->imageFile && $upload->validate()) {
+            $img_url = $upload->upload();
+        }
+
         $id = Yii::$app->request->post('id');
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
-        
-        
+
+            if($img_url){
+                $model->img = $img_url;
+            }
         
             if($model->validate() == true && $model->save()){
                 $msg = array('errno'=>0, 'msg'=>'保存成功');

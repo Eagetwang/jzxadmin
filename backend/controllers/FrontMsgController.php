@@ -68,8 +68,8 @@ class FrontMsgController extends BaseController
             $rid = $model->rid;
             $a = FrontUser::findOne($uid);
             $b = FrontUser::findOne($rid);
-            $model->id = $a->name;
-            $model->rid = $b->name;
+            $model->id = $a ? $a->name : '';
+            $model->rid = $b ? $b->name : '';
         }
         return $this->render('index', [
             'models'=>$models,

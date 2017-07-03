@@ -8,6 +8,7 @@ use Yii;
  *
  * @property string $id
  * @property string $name
+ * @property string $img
  * @property string $level
  * @property string $department
  * @property string $address_time
@@ -35,7 +36,7 @@ class FrontDoctor extends \backend\models\BaseModel
     {
         return [
             [['address_time', 'introduce', 'major'], 'required'],
-            [['address_time', 'introduce', 'major'], 'string'],
+            [['address_time', 'introduce', 'major','img'], 'string'],
             [['create_time', 'createby', 'update_time', 'updateby'], 'integer'],
             [['name', 'level', 'department'], 'string', 'max' => 100]
         ];
@@ -49,6 +50,7 @@ class FrontDoctor extends \backend\models\BaseModel
         return [
             'id' => 'ID',
             'name' => '姓名',
+            'img' => '头像',
             'level' => '级别',
             'department' => '科室',
             'address_time' => '门诊时间、门诊地点',
