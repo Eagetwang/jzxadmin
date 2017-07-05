@@ -32,12 +32,12 @@ class FrontMsgController extends BaseController
             foreach($querys as $key=>$value){
                 $value = trim($value);
                 if(empty($value) == false){
-                    $parame[":{$key}"]=$value;
+                    $parame[":{$key}"]='%'.$value.'%';
                     if(empty($condition) == true){
-                        $condition = " {$key}=:{$key} ";
+                        $condition = " {$key} like :{$key} ";
                     }
                     else{
-                        $condition = $condition . " AND {$key}=:{$key} ";
+                        $condition = $condition . " AND {$key} like :{$key} ";
                     }
                 }
             }
@@ -64,11 +64,11 @@ class FrontMsgController extends BaseController
         ->limit($pagination->limit)
         ->all();
         foreach ($models as &$model){
-            $uid = $model->id;
+            $uid = $model->user_id;
             $rid = $model->rid;
             $a = FrontUser::findOne($uid);
             $b = FrontUser::findOne($rid);
-            $model->id = $a ? $a->name : '';
+            $model->user_id = $a ? $a->name : '';
             $model->rid = $b ? $b->name : '';
         }
         return $this->render('index', [
