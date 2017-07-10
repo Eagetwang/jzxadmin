@@ -71,6 +71,7 @@ $modelLabel = new \backend\models\FrontAdvise();
               echo '<th onclick="orderby(\'email\', \'desc\')" '.CommonFun::sortClass($orderby, 'email').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('email').'</th>';
               echo '<th onclick="orderby(\'phone\', \'desc\')" '.CommonFun::sortClass($orderby, 'phone').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('phone').'</th>';
               echo '<th onclick="orderby(\'advise\', \'desc\')" '.CommonFun::sortClass($orderby, 'advise').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('advise').'</th>';
+              echo '<th onclick="orderby(\'reply\', \'desc\')" '.CommonFun::sortClass($orderby, 'reply').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('reply').'</th>';
               echo '<th onclick="orderby(\'create_time\', \'desc\')" '.CommonFun::sortClass($orderby, 'create_time').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('create_time').'</th>';
          
 			?>
@@ -89,6 +90,7 @@ $modelLabel = new \backend\models\FrontAdvise();
                 echo '  <td>' . $model->email . '</td>';
                 echo '  <td>' . $model->phone . '</td>';
                 echo '  <td>' . $model->advise . '</td>';
+                echo '  <td>' . $model->reply . '</td>';
                 echo '  <td>' . date('Y-m-d H:i:s',$model->create_time) . '</td>';
                 echo '  <td class="center">';
                 echo '      <a id="delete_btn" onclick="deleteAction(' . $model->id . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';

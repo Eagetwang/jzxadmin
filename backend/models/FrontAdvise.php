@@ -11,6 +11,7 @@ use Yii;
  * @property string $email
  * @property string $phone
  * @property string $advise
+ * @property string $reply
  * @property integer $create_time
  */
 class FrontAdvise extends \backend\models\BaseModel
@@ -30,7 +31,7 @@ class FrontAdvise extends \backend\models\BaseModel
     {
         return [
             [['advise'], 'required'],
-            [['advise'], 'string'],
+            [['advise','reply'], 'string'],
             [['create_time'], 'integer'],
             [['name'], 'string', 'max' => 100],
             [['email'], 'string', 'max' => 255],
@@ -49,6 +50,7 @@ class FrontAdvise extends \backend\models\BaseModel
             'email' => '邮箱',
             'phone' => '电话',
             'advise' => '建议',
+            'reply' => '回复',
             'create_time' => '建议时间',
         ];
     }
