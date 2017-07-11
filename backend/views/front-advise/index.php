@@ -70,6 +70,7 @@ $modelLabel = new \backend\models\FrontAdvise();
               echo '<th onclick="orderby(\'name\', \'desc\')" '.CommonFun::sortClass($orderby, 'name').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('name').'</th>';
               echo '<th onclick="orderby(\'email\', \'desc\')" '.CommonFun::sortClass($orderby, 'email').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('email').'</th>';
               echo '<th onclick="orderby(\'phone\', \'desc\')" '.CommonFun::sortClass($orderby, 'phone').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('phone').'</th>';
+              echo '<th onclick="orderby(\'img\', \'desc\')" '.CommonFun::sortClass($orderby, 'img').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('img').'</th>';
               echo '<th onclick="orderby(\'advise\', \'desc\')" '.CommonFun::sortClass($orderby, 'advise').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('advise').'</th>';
               echo '<th onclick="orderby(\'reply\', \'desc\')" '.CommonFun::sortClass($orderby, 'reply').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('reply').'</th>';
               echo '<th onclick="orderby(\'create_time\', \'desc\')" '.CommonFun::sortClass($orderby, 'create_time').' tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >'.$modelLabel->getAttributeLabel('create_time').'</th>';
@@ -89,12 +90,25 @@ $modelLabel = new \backend\models\FrontAdvise();
                 echo '  <td>' . $model->name . '</td>';
                 echo '  <td>' . $model->email . '</td>';
                 echo '  <td>' . $model->phone . '</td>';
+                $img = explode('|',$model->img);
+				echo '<td>';
+				if($model->img){
+					foreach ($img as $v){
+						echo '<img style="width: 100px;height: 60px" src="'.$v.'" onclick="javascript:window.open(this.src)" />';
+					}
+				}else{
+					echo '无图片';
+				}
+				echo '</td>';
                 echo '  <td>' . $model->advise . '</td>';
                 echo '  <td>' . $model->reply . '</td>';
                 echo '  <td>' . date('Y-m-d H:i:s',$model->create_time) . '</td>';
                 echo '  <td class="center">';
-                echo '      <a id="delete_btn" onclick="deleteAction(' . $model->id . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';
-                echo '  </td>';
+				echo '      <a id="delete_btn" onclick="deleteAction(' . $model->id . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';
+				if(!$model->reply){
+					echo "<a class='btn btn-primary btn-sm reply' data-id='".$model->id."' data-name='".$model->name."'><i class='glyphicon icon-white'>回复</a>";
+				}
+				echo '  </td>';
                 echo '</tr>';
             }
             
@@ -202,6 +216,32 @@ $modelLabel = new \backend\models\FrontAdvise();
 			<div class="modal-footer">
 				<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a> <a
 					id="edit_dialog_ok" href="#" class="btn btn-primary">确定</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"></h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label class="control-label col-xs-4 col-md-4" id="title_e">回复内容:</label>
+						<div class="col-xs-6 col-md-6">
+							<textarea class="form-control" name="name" style="height: 100px"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<input type="hidden" name="id" value=""/>
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary save">保存</button>
 			</div>
 		</div>
 	</div>
@@ -341,7 +381,41 @@ function deleteAction(id){
 	}
     
 }
-
+$(".reply").click(function () {
+	var id = $(this).data('id'),
+		name = $(this).data('name');
+	$('#myModalLabel').text('回复'+name);
+	$('input[name=id]').val(id);
+	$('textarea[name=name]').val('');
+	$('#myModal').modal('show');
+});
+//保存
+$(".save").click(function () {
+	var url = "<?=Url::toRoute('front-advise/reply')?>",
+		content = $('textarea[name=name]').val(),
+		id = $('input[name=id]').val();
+	console.log(url,content,id);
+	$.ajax({
+		url: url,
+		type: 'get',
+		data: {
+			content: content,
+			id: id,
+		},
+		dataType:"json",
+		error: function (xmlHttpRequest, textStatus, errorThrown) {
+			admin_tool.alert('msg_info', '出错了，' + textStatus, 'warning');
+		},
+		success: function(data){
+			if(data.errno==0){
+				admin_tool.alert('msg_info', '回复成功', 'success');
+				window.location.reload();
+			}else{
+				admin_tool.alert('msg_info', data.msg, 'error');
+			}
+		}
+	});
+});
 function getSelectedIdValues(formId)
 {
 	var value="";

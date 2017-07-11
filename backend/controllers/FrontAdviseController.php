@@ -154,6 +154,23 @@ class FrontAdviseController extends BaseController
   
     }
 
+    public function actionReply(){
+        $id = Yii::$app->request->get('id');
+        $content = Yii::$app->request->get('content');
+        $model = $this->findModel($id);
+        if($model->reply){
+            echo json_encode(array('errno'=>2, 'msg'=>'不能重复回复'));
+        }else{
+            $model->reply = $content;
+            if($model->save()){
+                echo json_encode(array('errno'=>0, 'data'=>'', 'msg'=>'回复成功'));
+            }else{
+                echo json_encode(array('errno'=>2, 'msg'=>'回复失败'));
+
+            }
+        }
+    }
+
     /**
      * Finds the FrontAdvise model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
